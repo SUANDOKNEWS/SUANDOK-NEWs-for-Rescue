@@ -1,0 +1,484 @@
+body {
+  font-family: 'Sarabun', Arial, sans-serif;
+  background: #f5f7fa;
+  margin: 0;
+  padding: 0;
+  color: #444;
+}
+
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  margin: 20px auto;
+  width: 90%;
+  max-width: 800px;
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 5px;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  color: #333;
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 30px;
+  letter-spacing: -0.3px;
+}
+
+p {
+  text-align: center;
+  color: #666;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.question {
+  margin: 25px 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+}
+
+.question p {
+  text-align: left;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
+.scale-section {
+  margin: 15px 0;
+  padding: 15px;
+  background-color: #fafbfc;
+  border-radius: 8px;
+  border: 1px solid #e1e4e8;
+}
+
+.scale-title {
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 10px !important;
+  font-size: 1.1em !important;
+  text-align: left !important;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 8px;
+  padding-bottom: 5px;
+}
+
+button {
+  background-color: #f5f7fa;
+  color: #444;
+  border: 1px solid #e1e4e8;
+  padding: 8px 12px;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-family: 'Sarabun', Arial, sans-serif;
+  font-weight: 500;
+  font-size: 0.95em;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  flex: 0 1 auto;
+}
+
+button:hover {
+  background-color: #e9ecef;
+  transform: translateY(-1px);
+}
+
+button.active {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #388E3C;
+  box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
+}
+
+.score {
+  display: inline-block;
+  margin-left: 6px;
+  font-weight: bold;
+  font-size: 0.85em;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.score-0 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.score-1 {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+
+.score-2 {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.score-3 {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+#totalScore {
+  font-weight: bold;
+  font-size: 1.3em;
+  transition: color 0.3s ease;
+}
+
+#totalScore.green-score {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+#totalScore.yellow-score {
+  color: #f57c00;
+  font-weight: bold;
+}
+
+#totalScore.red-score {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+#advice {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1em;
+  margin-top: 15px;
+  padding: 18px;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  line-height: 1.5;
+}
+
+#advice.incomplete {
+  color: #666;
+  background-color: #f8f9fa;
+}
+
+#advice.red-alert {
+  background-color: #fff5f5;
+  color: #c53030;
+  border-left: 4px solid #e53e3e;
+  animation: subtle-pulse 2s infinite;
+}
+
+#advice.high-score {
+  background-color: #fff5f5;
+  color: #c53030;
+}
+
+#advice.medium-score {
+  background-color: #fff8e1;
+  color: #ef6c00;
+}
+
+#advice.low-medium-score {
+  background-color: #fff3e0;
+  color: #ff8f00;
+}
+
+#advice.low-score {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+@keyframes subtle-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(229, 62, 62, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(229, 62, 62, 0);
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 10px;
+}
+
+#resetButton, #saveButton {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1em;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+#resetButton {
+  background-color: #f44336;
+  color: white;
+}
+
+#resetButton:hover {
+  background-color: #d32f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#saveButton {
+  background-color: #4CAF50;
+  color: white;
+}
+
+#saveButton:hover:not(:disabled) {
+  background-color: #388E3C;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#saveButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.current-nursing-care {
+  margin: 25px 0;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.current-nursing-care h3 {
+  text-align: center;
+  color: #2d3748;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
+.nursing-care-advice {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-left: 4px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.nursing-care-advice.low-score {
+  border-left-color: #2e7d32;
+  background-color: #f1f8e9;
+}
+
+.nursing-care-advice.low-medium-score,
+.nursing-care-advice.medium-score {
+  border-left-color: #ef6c00;
+  background-color: #fff8e1;
+}
+
+.nursing-care-advice.high-score,
+.nursing-care-advice.red-alert {
+  border-left-color: #d32f2f;
+  background-color: #fff5f5;
+}
+
+.nursing-care-advice h4 {
+  color: #2d3748;
+  margin: 0 0 10px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.nursing-care-advice p {
+  margin: 8px 0;
+  color: #4a5568;
+  text-align: left;
+  font-size: 0.95em;
+}
+
+.nursing-care-advice.red-alert h4 {
+  color: #d32f2f;
+}
+
+.nursing-care-container {
+  margin: 30px 0;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.nursing-care-container h3 {
+  text-align: center;
+  color: #2d3748;
+  margin-bottom: 20px;
+}
+
+.care-instructions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 10px;
+}
+
+.care-level.red-alert {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+  .care-instructions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.care-level {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.care-level h4 {
+  color: #2d3748;
+  margin: 0 0 10px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.care-level p {
+  margin: 8px 0;
+  color: #4a5568;
+  text-align: left;
+  font-size: 0.95em;
+}
+
+.care-level.red-alert {
+  border-left: 4px solid #c53030;
+  background-color: #fff5f5;
+}
+
+.care-level.red-alert h4 {
+  color: #c53030;
+}
+
+.statistics-container {
+  margin-top: 30px;
+  border-top: 1px solid #e1e4e8;
+  padding-top: 20px;
+}
+
+.statistics-container h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+#statisticsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#statisticsTable th, 
+#statisticsTable td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+#statisticsTable th {
+  background-color: #f6f8fa;
+  font-weight: 600;
+  color: #24292e;
+}
+
+#statisticsTable tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+#statisticsTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.delete-btn {
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.delete-btn:hover {
+  background-color: #ff3742;
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+}
+
+.delete-btn:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+    padding: 18px;
+  }
+
+  button {
+    font-size: 0.9em;
+    padding: 10px 14px;
+    width: calc(50% - 15px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #resetButton, #saveButton {
+    width: auto;
+    display: block;
+  }
+
+  .delete-btn {
+    width: 25px;
+    height: 25px;
+    font-size: 12px;
+  }
+
+  .options {
+    justify-content: space-between;
+  }
+
+  #statisticsTable th,
+  #statisticsTable td {
+    padding: 8px 10px;
+    font-size: 0.9em;
+  }
+}
