@@ -155,6 +155,15 @@
         <h2>คะแนนรวม: <span id="totalScore">0</span></h2>
         <p id="advice"></p>
         
+        <div class="question" id="referralSection">
+            <p><strong>ส่งต่อ</strong></p>
+            <div class="options" id="referral">
+                <button onclick="selectOption('referral', 0, this)">โรงพยาบาลมหาราชนครเชียงใหม่</button>
+                <button onclick="selectOption('referral', 0, this)">โรงพยาบาลนครพิงค์</button>
+                <button onclick="selectOption('referral', 0, this)">อื่นๆ</button>
+            </div>
+        </div>
+        
         <div class="current-nursing-care">
             <h3>คำแนะนำการพยาบาลปัจจุบัน</h3>
             <div id="nursingCareAdvice" class="nursing-care-advice">
@@ -213,6 +222,7 @@
                         <th>เพศ</th>
                         <th>อายุ</th>
                         <th>คะแนน</th>
+                        <th>ส่งต่อ</th>
                         <th>เวลา</th>
                         <th>ลบ</th>
                     </tr>
