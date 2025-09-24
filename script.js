@@ -11,7 +11,8 @@ let scores = {
 
 let selectedValues = {
   gender: null,
-  age: null
+  age: null,
+  referral: null
 };
 
 // Function to handle option selection for scoring parameters
@@ -24,7 +25,7 @@ function selectOption(category, score, button) {
   button.classList.add('active');
 
   // Store the score
-  if (category === 'gender' || category === 'age') {
+  if (category === 'gender' || category === 'age' || category === 'referral') {
       selectedValues[category] = button.textContent.trim();
   } else {
       scores[category] = score;
@@ -103,10 +104,11 @@ function updateAdvice(total, hasRedScore) {
   let nursingCare = '';
 
   if (hasRedScore) {
-      advice = 'ตรวจพบ RED Score คะแนนแดง - ต้องได้รับการดูแลอย่างเร่งด่วน';
+      advice = 'ตรวจพบ RED Score คะแนนแดง - ผู้ป่วยอาจมีอาการเปลี่ยนแปลงต้องได้รับการดูแลอย่างใกล้ชิด';
       className = 'red-alert';
       nursingCare = `
           <h4>⚠️ กรณีพบ RED Score คะแนนแดง (คะแนนข้อใดข้อหนึ่ง +3)</h4>
+          <p><strong>ผู้ป่วยอาจมีอาการเปลี่ยนแปลงต้องได้รับการดูแลอย่างใกล้ชิด</strong></p>
           <p>- เฝ้าระวังอาการเปลี่ยนแปลงของผู้ป่วยอย่างใกล้ชิด</p>
           <p>- ประสานงานแจ้งโรงพยาบาลเพื่อเตรียมความพร้อม</p>
           <p>- พิจารณาส่งโรงพยาบาลภายในระยะเวลา 8 นาที</p>
@@ -138,7 +140,7 @@ function updateAdvice(total, hasRedScore) {
           <p>- เฝ้าระวังอาการเปลี่ยนแปลง</p>
           <p>- พิจารณาส่งโรงพยาบาลภายในระยะเวลา 15 นาที</p>
       `;
-  } else if (total > 0) {
+  } else if (total >= 1) {
       advice = 'คะแนนต่ำ - Non Urgent ไม่เร่งด่วน';
       className = 'low-score';
       nursingCare = `
@@ -147,14 +149,22 @@ function updateAdvice(total, hasRedScore) {
           <p>- ติดตามอาการตามปกติ</p>
           <p>- พิจารณาส่งต่อโรงพยาบาลตามสิทธิการรักษา</p>
       `;
+  } else if (total === 0) {
+      advice = 'คะแนนต่ำ - Non Urgent ไม่เร่งด่วน';
+      className = 'low-score';
+      nursingCare = `
+          <h4>คะแนนต่ำ (0): Non Urgent ไม่เร่งด่วน</h4>
+          <p><strong>ไม่มีความเสี่ยงในปัจจุบัน แต่ควรติดตามอาการต่อไป</strong></p>
+          <p>- แนะนำขั้นตอนการปฏิบัติตัวเบื้องต้นแก่ผู้ป่วย</p>
+          <p>- ติดตามอาการตามปกติ</p>
+          <p>- พิจารณาส่งต่อโรงพยาบาลตามสิทธิการรักษา</p>
+      `;
   } else {
       advice = 'กรุณาเลือกข้อมูลเพื่อประเมินคะแนน';
       className = 'low-score';
       nursingCare = `
-          <h4>คะแนนต่ำ (0): Non Urgent ไม่เร่งด่วน</h4>
-          <p>- แนะนำขั้นตอนการปฏิบัติตัวเบื้องต้นแก่ผู้ป่วย</p>
-          <p>- ติดตามอาการตามปกติ</p>
-          <p>- พิจารณาส่งต่อโรงพยาบาลตามสิทธิการรักษา</p>
+          <h4>กรุณาเลือกข้อมูลเพื่อประเมินคะแนน</h4>
+          <p>- เลือกตัวเลือกในแต่ละหมวดเพื่อดูคำแนะนำการพยาบาล</p>
       `;
   }
 
@@ -184,7 +194,8 @@ function resetScores() {
   // Reset selected values
   selectedValues = {
       gender: null,
-      age: null
+      age: null,
+      referral: null
   };
 
   // Remove active class from all buttons
@@ -219,6 +230,11 @@ function isFormComplete() {
       }
   }
 
+  // Check if referral is selected (always required now)
+  if (!selectedValues.referral) {
+      return false;
+  }
+
   return true;
 }
 
@@ -226,17 +242,24 @@ function isFormComplete() {
 function saveToStatistics() {
   // Check if all required fields are completed
   if (!isFormComplete()) {
-      alert('กรุณาเลือกให้ครบทุกข้อก่อนบันทึกข้อมูล (เพศ, อายุ และการประเมินทุกข้อ)');
+      alert('กรุณาเลือกให้ครบทุกข้อก่อนบันทึกข้อมูล (เพศ, อายุ, การประเมินทุกข้อ และส่งต่อ)');
       return;
   }
 
   // Calculate total score
   let total = 0;
+  let hasRedScore = false;
   Object.values(scores).forEach(score => {
       if (score !== null) {
           total += score;
+          if (score === 3) {
+              hasRedScore = true;
+          }
       }
   });
+
+  // Send data to Google Form
+  sendToGoogleForm(total, hasRedScore);
 
   // Get current date and time
   const now = new Date();
@@ -250,10 +273,11 @@ function saveToStatistics() {
   newRow.insertCell(0).textContent = selectedValues.gender;
   newRow.insertCell(1).textContent = selectedValues.age;
   newRow.insertCell(2).textContent = total;
-  newRow.insertCell(3).textContent = dateTime;
+  newRow.insertCell(3).textContent = selectedValues.referral || '-';
+  newRow.insertCell(4).textContent = dateTime;
 
    // Add delete button cell
-   const deleteCell = newRow.insertCell(4);
+   const deleteCell = newRow.insertCell(5);
    const deleteButton = document.createElement('button');
    deleteButton.innerHTML = '✕';
    deleteButton.className = 'delete-btn';
@@ -275,6 +299,7 @@ function saveToLocalStorage() {
   const data = {
       gender: selectedValues.gender,
       age: selectedValues.age,
+      referral: selectedValues.referral,
       scores: scores,
       totalScore: Object.values(scores).reduce((sum, score) => sum + (score || 0), 0),
       timestamp: new Date().toISOString(),
@@ -296,6 +321,35 @@ function saveToLocalStorage() {
   localStorage.setItem('newsStatistics', JSON.stringify(savedData));
 }
 
+// Function to send data to Google Form
+function sendToGoogleForm(totalScore, hasRedScore) {
+  // Google Form URL
+  const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScW0Jcp1s7EXUr_OsKrBf7Ccs5nLt_Z6o_QojxnB6-gcITglw/formResponse';
+  
+  // สร้าง FormData สำหรับส่งข้อมูล
+  const formData = new FormData();
+  
+  // เพิ่มข้อมูลลงใน FormData ด้วย field ID จริงจาก Google Form
+  formData.append('entry.804811008', selectedValues.gender || ''); // เพศ
+  formData.append('entry.1859376595', selectedValues.age || ''); // อายุ
+  formData.append('entry.1483682713', totalScore); // คะแนนรวม
+  formData.append('entry.1933464715', selectedValues.referral || ''); // ส่งต่อ
+  formData.append('entry.453445348', new Date().toLocaleString('th-TH')); // วันที่เวลา
+  
+  // ส่งข้อมูลไป Google Form
+  fetch(GOOGLE_FORM_URL, {
+    method: 'POST',
+    body: formData,
+    mode: 'no-cors' // จำเป็นสำหรับ Google Forms
+  })
+  .then(() => {
+    console.log('ส่งข้อมูลไป Google Form สำเร็จ');
+  })
+  .catch((error) => {
+    console.error('เกิดข้อผิดพลาดในการส่งข้อมูลไป Google Form:', error);
+  });
+}
+
 // Function to load data from localStorage on page load
 function loadFromLocalStorage() {
   const savedData = JSON.parse(localStorage.getItem('newsStatistics') || '[]');
@@ -306,10 +360,11 @@ function loadFromLocalStorage() {
       newRow.insertCell(0).textContent = record.gender;
       newRow.insertCell(1).textContent = record.age;
       newRow.insertCell(2).textContent = record.totalScore;
-      newRow.insertCell(3).textContent = new Date(record.timestamp).toLocaleString('th-TH');
+      newRow.insertCell(3).textContent = record.referral || '-';
+      newRow.insertCell(4).textContent = new Date(record.timestamp).toLocaleString('th-TH');
 
        // Add delete button cell
-       const deleteCell = newRow.insertCell(4);
+       const deleteCell = newRow.insertCell(5);
        const deleteButton = document.createElement('button');
        deleteButton.innerHTML = '✕';
        deleteButton.className = 'delete-btn';
